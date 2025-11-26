@@ -1,18 +1,30 @@
-# How to work with the template
+# Как работать с репозиторием (Analysis as Code)
 
-1. Fill all sections in "Introduction and Goals" and "Architecture Constraints" (01_introduction_and_goals.adoc, 02_architecture_constraints.adoc).
-You absolutely need the requirements to validate your design decisions.
-All template sections contain tips and examples. Follow them if you're not sure what to write.
-2. Fill "Quality Requirements" (10_quality_requirements.adoc) and summarize the most important ones in "Quality Goals" (a subsection in 01_introduction_and_goals.adoc).
-3. Fill "Risks and Technical Debts" (11_technical_risks.adoc).
-4. Use ADD 3.0 to create the architecture model. Start the design with the most risky parts. On each iteration, update
-your model and ADRs accordingly. Use comparison tables to evaluate different design options in your ADRs.
-5. Embed your C4 Landscape (if needed) and Context diagrams in the "System Scope and Context/Business Context" section (03_system_scope_and_context.adoc).
-6. Embed your most important C4 Container diagram in the "System Scope and Context/Technical Context" section (03_system_scope_and_context.adoc).
-7. Consider embedding other C4 Container and Component diagrams in the "Building Block View" section (05_building_block_view.adoc).
-8. Embed your Dynamic diagrams in the "Runtime View" section (06_runtime_view.adoc).
-9. Embed your Deployment diagrams in the "Deployment View" section (07_deployment_view.adoc).
-10. If you have to repeat yourself, consider putting shared information into "Concepts" (08_concepts.adoc).
-11. Summarize your design decisions in "Solution Strategy" (04_solution_strategy.adoc).
-12. Fill out "Glossary" if you have many domain-specific terms (12_glossary.adoc).
-13. Delete the documentation sections you didn't use.
+## Роли и этапы
+1) BA → StRS: взять сырые входные (`input/`), промпт `prompts/10-gost-642-stakeholder.md`, результат в `target/docs/src/01_Stakeholder_Needs/` (Stakeholders, OpsCon, Constraints, REQ-BIZ).
+2) SA → Impact: использовать StRS + `reference/` (OpenAPI, схемы БД, интеграции), промпт `prompts/20-gost-643-impact-analysis.md`, результат `00_impact_analysis.adoc`.
+3) SA → SyRS: промпт `prompts/21-gost-643-system-spec.md`, заполнить `01_functional`, `02_quality`, `03_interfaces`, `04_verification`.
+4) PM/SA → PDR/ADR: при развилках использовать `prompts/30-product-decision.md`, класть файл в `target/adrs/`.
+5) QA/Lead → Трассировка: `prompts/90-traceability-check.md`, отчет в `target/docs/src/04_Traceability/`.
+
+## Структура артефактов
+- `input/` — сырые данные без правок.
+- `reference/` — AS-IS: `openapi/`, `db_schema/`, `integrations.md`.
+- `prompts/` — инструкции по ролям и процессам.
+- `target/docs/src/` — итоговые документы StRS/SyRS/архитектура/трассировка.
+- `target/adrs/` — решения и развилки (PDR/ADR).
+- `target/model.dsl` — модель Structurizr (опционально для диаграмм).
+
+## Принципы
+- Разделение BA (потребности) и SA (дельта системы).
+- Brownfield: работаем от AS-IS, не ломаем существующие контракты без версии.
+- Всё в git: версии, ревью, трассировка.
+- Никаких технических решений в StRS: только бизнес-ценность.
+- Прозрачность рисков: impact-анализ фиксирует breaking changes.
+
+## Мини-Checklist перед ревью
+- StRS: требования без технологий, есть ограничения и сценарии.
+- Impact: явный вердикт по совместимости/версионированию.
+- SyRS: REQ-SYS связаны с REQ-BIZ, НФТ и интерфейсы задокументированы.
+- PDR/ADR: решения и последствия зафиксированы.
+- Трассировка: нет сиротских требований, критерии приемки покрывают SyRS.

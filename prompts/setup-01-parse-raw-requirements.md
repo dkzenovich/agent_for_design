@@ -10,7 +10,7 @@ description: 'BOOTSTRAP: Преобразовать сырое описание 
 </context>
 
 <inputs>
-- Сырой текст описания задачи (User Prompt).
+- Содержимое файла `input/raw_input.md`
 </inputs>
 
 <outputs>
